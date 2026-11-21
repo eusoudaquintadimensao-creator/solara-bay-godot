@@ -13,3 +13,5 @@
 | 0.3.0-step4b | 21/11/2026 | v0.3.0-step4 | — | verificada: a pé → ENTRAR → 107 km/h; modos Arcade/Equilibrado/Simulação; carros estacionados; 0 erros |
 | 0.3.0-step5 | 21/11/2026 | v0.3.0-step5 (5c9f621) | arquivos mantidos | verificada: pausa (Continuar/Salvar/Direção/Gráficos/Menu/Música/Efeitos/Controles), autosave, controles Botões/Tocar/Inclinar/Volante, deslize nitro/drift; 0 erros |
 | 0.3.0-step5b | 21/11/2026 | v0.3.0-step5b (b1ae76e) | principal + estável | B26: confere a versão no ar (ATUAL.txt) e recarrega 1 vez sem cache se mudou ou se faltar arquivo; publicação mantém as 2 versões anteriores (4b e 5 voltaram); 0 erros |
+| 0.3.0-step6 | 21/11/2026 | v0.3.0-step6 (0ba526a) | arquivos mantidos | verificada: realismo visual (pintura metálica/verniz, rodas, placas, asfalto com rachaduras, faixas gastas, meio-fio), botão MENU; 0 erros |
+| 0.3.0-step7 | 21/11/2026 | v0.3.0-step7 (50b68f1) | principal + estável | verificada COM SOM: B30/B31 (Web estava muda desde o passo 5) corrigidos; ronco por RPM, nitro, pneu, batida, ambiente, botão SOM/MUDO; no ar: voz −19,9 dB RMS, acelerando −13,8 dB RMS, pico −1,3 dBFS, 0 estouros, 48 kHz; 0 erros |
