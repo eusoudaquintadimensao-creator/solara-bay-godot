@@ -36,7 +36,7 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
   <div id="pct">0%</div>
   <div id="bar"><i></i></div>
   <div id="stage">Preparando…</div>
-  <div id="hint">Primeira vez: baixa cerca de 25 MB. Use Wi-Fi se puder.</div>
+  <div id="hint">Na primeira vez o jogo é baixado (cerca de 25 MB pela internet). Use Wi-Fi se puder.</div>
   <button id="go" type="button">▶ Toque para jogar</button>
 </div>
 <div id="err" role="alert"></div>
@@ -105,7 +105,7 @@ const GODOT_THREADS_ENABLED = false;
     onProgress: function (c, t) {
       if (c > 0 && t > 0) {
         const mb = (x) => (x / 1048576).toFixed(1);
-        show(c / t * 60, 'Baixando o jogo… ' + mb(c) + ' de ' + mb(t) + ' MB');
+        show(c / t * 60, 'Baixando o jogo…');
         if (c >= t && !dlDone) { dlDone = true; console.log('[Solara] ' + T() + ' download completo'); show(62, 'Iniciando o motor…'); }
       }
     },
