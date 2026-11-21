@@ -24,8 +24,8 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
 #err b{font-family:system-ui,sans-serif;font-size:15px;color:#fff}
 #err button,#err a{margin:8px 8px 0 0;padding:8px 14px;border-radius:999px;border:1px solid #ff9db0;background:#5b2030;color:#fff;font:600 14px system-ui,sans-serif;text-decoration:none;display:inline-block}
 </style>
-<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step4.icon.png" />
-<link rel="apple-touch-icon" href="solara-030-step4.apple-touch-icon.png"/>
+<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step4b.icon.png" />
+<link rel="apple-touch-icon" href="solara-030-step4b.apple-touch-icon.png"/>
 
 </head>
 <body>
@@ -49,7 +49,7 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
     msg = String(msg || '').slice(0, 1200); if (IGNORE.test(msg) || seen.has(msg) || n > 12) return; seen.add(msg); n++;
     if (!box.firstChild) {
       box.innerHTML = '<b>⚠️ Algo deu errado — tire um print desta tela</b>\n<span id="errinfo"></span>\n';
-      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step4';
+      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step4b';
       box.querySelector('#errinfo').textContent = info;
       const r = document.createElement('a'); r.href = location.pathname + '?q=leve&r=' + Date.now(); r.textContent = '↻ Recarregar no modo leve';
       const x = document.createElement('button'); x.textContent = 'Fechar'; x.onclick = () => { box.style.display = 'none'; };
@@ -62,9 +62,9 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
   window.addEventListener('unhandledrejection', (e) => solaraShowError('Erro', e.reason && (e.reason.message || e.reason)));
 }());
 </script>
-<script src="solara-030-step4.js"></script>
+<script src="solara-030-step4b.js"></script>
 <script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step4","experimentalVK":false,"fileSizes":{"solara-030-step4.pck":15938680,"solara-030-step4.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step4b","experimentalVK":false,"fileSizes":{"solara-030-step4b.pck":15938680,"solara-030-step4b.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 (function () {
   const ld = document.getElementById('ld'), bar = document.querySelector('#bar i'), pct = document.getElementById('pct'),
