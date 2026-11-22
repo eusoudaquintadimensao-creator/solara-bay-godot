@@ -1,0 +1,16 @@
+{
+  "name": "Solara Bay — Miami Beach Drive",
+  "short_name": "Solara Bay",
+  "description": "Mundo aberto em Miami 2088: dirigir, voar, navegar — leve no celular.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#0f0c19",
+  "theme_color": "#0e1114",
+  "lang": "pt-BR",
+  "icons": [
+    {"src": "icon_192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon_512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
