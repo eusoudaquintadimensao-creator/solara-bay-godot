@@ -41,10 +41,16 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
 #ttprof{width:min(100%,780px)}.ttp{width:100%;height:min(560px,70vh);border:0;border-radius:14px;background:#fff}
 #ttpaste{display:flex;gap:8px;width:min(100%,520px)}#ttin{flex:1;min-width:0;padding:10px;border-radius:10px;border:1px solid #4a3a80;background:#0f0b1e;color:#fff;font-size:15px}#ttgo{padding:10px 16px;border-radius:10px;border:0;background:#5fd6cc;color:#062;font-weight:700}
 #ttnote{font-size:12px;color:#9aa0b8;max-width:520px;text-align:center;margin:0 0 20px}
+#upd{display:none;position:fixed;left:50%;transform:translateX(-50%);top:max(8px,env(safe-area-inset-top));z-index:25;max-width:min(94vw,520px);background:rgba(14,10,30,.94);border:1px solid #5fd6cc;border-radius:16px;padding:10px 12px;color:#fff;font:600 15px system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45);align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+#upd button{padding:10px 14px;border-radius:999px;border:0;font:700 15px system-ui,sans-serif}#updgo{background:linear-gradient(180deg,#ffd23f,#e0a400);color:#1a1205}#updlater{background:#2a2350;color:#fff}
 </style>
-<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step15.icon.png" />
-<link rel="apple-touch-icon" href="solara-030-step15.apple-touch-icon.png"/>
+<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step17.icon.png" />
+<link rel="apple-touch-icon" href="solara-030-step17.apple-touch-icon.png"/>
 
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon_192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 <body>
 <canvas id="canvas">Seu navegador não suporta canvas.</canvas>
@@ -162,7 +168,7 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
     msg = String(msg || '').slice(0, 1200); if (IGNORE.test(msg) || seen.has(msg) || n > 12) return; seen.add(msg); n++;
     if (!box.firstChild) {
       box.innerHTML = '<b>⚠️ Algo deu errado — tire um print desta tela</b>\n<span id="errinfo"></span>\n';
-      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step15';
+      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step17';
       box.querySelector('#errinfo').textContent = info;
       const r = document.createElement('a'); r.href = location.pathname + '?q=leve&r=' + Date.now(); r.textContent = '↻ Recarregar no modo leve';
       const x = document.createElement('button'); x.textContent = 'Fechar'; x.onclick = () => { box.style.display = 'none'; };
@@ -183,7 +189,7 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
 // Se o navegador guardou um index.html velho (de outra versão) ou algum arquivo da versão sumiu (404),
 // recarrega UMA vez com ?v=<agora> para pular o cache. ATUAL.txt (sem cache) diz qual versão está no ar.
 (function () {
-  const MY = 'solara-030-step15', KEY = 'solara_fresh_reload';
+  const MY = 'solara-030-step17', KEY = 'solara_fresh_reload';
   window.solaraReloadFresh = function (why) {
     if (window.__solaraReady || sessionStorage.getItem(KEY)) return false;
     sessionStorage.setItem(KEY, why); console.log('[Solara] recarregando sem cache: ' + why);
@@ -199,9 +205,9 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
   window.addEventListener('load', () => setTimeout(() => { if (window.__solaraReady) sessionStorage.removeItem(KEY); }, 3000));
 }());
 </script>
-<script src="solara-030-step15.js" onerror="solaraReloadFresh('motor 404') || solaraShowError('Download', 'Não consegui baixar o motor do jogo. Recarregue a página.', true)"></script>
+<script src="solara-030-step17.js" onerror="solaraReloadFresh('motor 404') || solaraShowError('Download', 'Não consegui baixar o motor do jogo. Recarregue a página.', true)"></script>
 <script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step15","experimentalVK":false,"fileSizes":{"solara-030-step15.pck":18886800,"solara-030-step15.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step17","experimentalVK":false,"fileSizes":{"solara-030-step17.pck":18969576,"solara-030-step17.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 (function () {
   const ld = document.getElementById('ld'), bar = document.querySelector('#bar i'), pct = document.getElementById('pct'),
@@ -265,6 +271,51 @@ const GODOT_THREADS_ENABLED = false;
     stageEl.textContent = 'Não foi possível iniciar o jogo.';
   });
   }
+}());
+</script>
+<div id="upd" role="status"><span id="updtxt">Nova versão disponível</span><button id="updgo" type="button">Atualizar agora</button><button id="updlater" type="button">Depois</button></div>
+<script>
+// ---------- PWA + atualização automática (t60) ----------
+// Service worker: rede primeiro para ATUAL.txt/HTML, cache primeiro para os arquivos versionados (offline funciona).
+// Jogando: confere ATUAL.txt (sem cache) a cada 3 min e ao voltar para o app. Versão nova → aviso discreto.
+// "Atualizar agora": o jogo espera um momento seguro (nunca no meio de corrida/voo), salva e recarrega.
+// "Depois": continua jogando; na próxima vez que abrir, a página já vem nova (HTML é rede-primeiro).
+(function () {
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { scope: './' }).then(
+      (r) => console.log('[Solara] PWA: service worker ativo em ' + r.scope), (e) => console.log('[Solara] PWA: sem service worker (' + e + ')')));
+  }
+  const MY = 'solara-030-step17', box = document.getElementById('upd'), txt = document.getElementById('updtxt');
+  let later = 0, newer = '';
+  function goNow() {
+    txt.textContent = 'Salvando e atualizando…';
+    setTimeout(() => { const u = new URL(location.href); u.searchParams.set('v', Date.now()); location.replace(u.toString()); }, 1200);   // dá tempo do save ir para o IndexedDB
+  }
+  window.solaraUpdateGoNow = goNow;
+  window.solaraUpdateWait = function () { txt.textContent = 'Atualiza assim que você parar (sem corrida/voo)…'; };
+  document.getElementById('updgo').addEventListener('click', () => {
+    if (!window.__solaraReady) { goNow(); return; }   // ainda carregando: pode recarregar direto
+    window.__solaraUpdateRequest = true; txt.textContent = 'Preparando a atualização…';
+    setTimeout(() => { if (window.__solaraUpdateRequest && !window.__solaraUpdateGo) txt.textContent = 'Atualiza assim que você parar…'; }, 4000);
+  });
+  document.getElementById('updlater').addEventListener('click', () => { box.style.display = 'none'; later = Date.now(); });
+  async function check(why) {
+    if (MY.indexOf('$') >= 0 || window.__solaraTikTokOpen) return;
+    try {
+      const r = await fetch('ATUAL.txt?nc=' + Date.now(), { cache: 'no-store' }); if (!r.ok) return;
+      const t = (await r.text()).trim();
+      if (!/^solara-[\w-]+$/.test(t) || t === MY) return;
+      newer = t; window.__solaraNewVersion = t;
+      if (!window.__solaraReady) { if (window.solaraReloadFresh) solaraReloadFresh('versão nova no ar ' + t); return; }   // B26
+      if (later && Date.now() - later < 10 * 60 * 1000) return;   // "Depois": lembra de novo em 10 min
+      if (box.style.display !== 'flex') { txt.textContent = 'Nova versão disponível'; box.style.display = 'flex'; console.log('[Solara] atualização: nova versão ' + t + ' (' + why + ')'); }
+    } catch (e) {}
+  }
+  window.solaraUpdateCheck = check;
+  setInterval(() => check('3 min'), 3 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) check('voltou ao app'); });
+  window.addEventListener('online', () => check('internet voltou'));
+  window.addEventListener('pageshow', (e) => { if (e.persisted) check('retomou'); });
 }());
 </script>
 </body>
