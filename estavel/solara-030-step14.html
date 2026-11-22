@@ -6,12 +6,20 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta name="theme-color" content="#0e1114">
 <title>Solara Bay - Prototipo Godot</title>
+<link rel="preload" as="image" href="loading_bg_v1.webp" type="image/webp" fetchpriority="high">
 <style>
 html,body,#canvas{margin:0;padding:0;border:0}
 body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 #canvas{display:block}#canvas:focus{outline:none}
 #ld{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;box-sizing:border-box;
- background:radial-gradient(120% 80% at 70% 20%,#3a2050 0%,#15131f 55%,#0b0d12 100%);text-align:center}
+ background-color:#15131f;text-align:center;
+ /* t58: cidade neon de fundo (arquivo versionado, B26) + véu escuro para o texto ficar legível */
+ background-image:linear-gradient(180deg,rgba(10,8,20,.55) 0%,rgba(10,8,20,.25) 22%,rgba(10,8,20,.72) 40%,rgba(10,8,20,.78) 62%,rgba(10,8,20,.35) 82%,rgba(10,8,20,.6) 100%),url(loading_bg_v1.jpg);
+ background-image:linear-gradient(180deg,rgba(10,8,20,.55) 0%,rgba(10,8,20,.25) 22%,rgba(10,8,20,.72) 40%,rgba(10,8,20,.78) 62%,rgba(10,8,20,.35) 82%,rgba(10,8,20,.6) 100%),-webkit-image-set(url(loading_bg_v1.webp) type("image/webp"),url(loading_bg_v1.jpg) type("image/jpeg"));
+ background-image:linear-gradient(180deg,rgba(10,8,20,.55) 0%,rgba(10,8,20,.25) 22%,rgba(10,8,20,.72) 40%,rgba(10,8,20,.78) 62%,rgba(10,8,20,.35) 82%,rgba(10,8,20,.6) 100%),image-set(url(loading_bg_v1.webp) type("image/webp"),url(loading_bg_v1.jpg) type("image/jpeg"));
+ background-size:cover;background-position:54% 50%;background-repeat:no-repeat}
+@media (orientation:landscape){#ld{background-position:50% 60%}}
+#ld h1,#ld #pct,#ld #stage,#ld #hint{text-shadow:0 2px 10px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.9)}
 #ld h1{margin:0;font-weight:300;letter-spacing:.32em;font-size:clamp(20px,6vw,40px);color:#ffd27a}
 #ld h1 b{display:block;font-weight:600;letter-spacing:.18em;font-size:.55em;color:#5fd6cc;margin-top:6px}
 #bar{width:min(80vw,460px);height:10px;border-radius:6px;background:#22303a;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.4)}
@@ -24,8 +32,8 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
 #err b{font-family:system-ui,sans-serif;font-size:15px;color:#fff}
 #err button,#err a{margin:8px 8px 0 0;padding:8px 14px;border-radius:999px;border:1px solid #ff9db0;background:#5b2030;color:#fff;font:600 14px system-ui,sans-serif;text-decoration:none;display:inline-block}
 </style>
-<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step12.icon.png" />
-<link rel="apple-touch-icon" href="solara-030-step12.apple-touch-icon.png"/>
+<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step14.icon.png" />
+<link rel="apple-touch-icon" href="solara-030-step14.apple-touch-icon.png"/>
 
 </head>
 <body>
@@ -73,7 +81,7 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
     msg = String(msg || '').slice(0, 1200); if (IGNORE.test(msg) || seen.has(msg) || n > 12) return; seen.add(msg); n++;
     if (!box.firstChild) {
       box.innerHTML = '<b>⚠️ Algo deu errado — tire um print desta tela</b>\n<span id="errinfo"></span>\n';
-      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step12';
+      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step14';
       box.querySelector('#errinfo').textContent = info;
       const r = document.createElement('a'); r.href = location.pathname + '?q=leve&r=' + Date.now(); r.textContent = '↻ Recarregar no modo leve';
       const x = document.createElement('button'); x.textContent = 'Fechar'; x.onclick = () => { box.style.display = 'none'; };
@@ -94,7 +102,7 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
 // Se o navegador guardou um index.html velho (de outra versão) ou algum arquivo da versão sumiu (404),
 // recarrega UMA vez com ?v=<agora> para pular o cache. ATUAL.txt (sem cache) diz qual versão está no ar.
 (function () {
-  const MY = 'solara-030-step12', KEY = 'solara_fresh_reload';
+  const MY = 'solara-030-step14', KEY = 'solara_fresh_reload';
   window.solaraReloadFresh = function (why) {
     if (window.__solaraReady || sessionStorage.getItem(KEY)) return false;
     sessionStorage.setItem(KEY, why); console.log('[Solara] recarregando sem cache: ' + why);
@@ -110,9 +118,9 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
   window.addEventListener('load', () => setTimeout(() => { if (window.__solaraReady) sessionStorage.removeItem(KEY); }, 3000));
 }());
 </script>
-<script src="solara-030-step12.js" onerror="solaraReloadFresh('motor 404') || solaraShowError('Download', 'Não consegui baixar o motor do jogo. Recarregue a página.', true)"></script>
+<script src="solara-030-step14.js" onerror="solaraReloadFresh('motor 404') || solaraShowError('Download', 'Não consegui baixar o motor do jogo. Recarregue a página.', true)"></script>
 <script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step12","experimentalVK":false,"fileSizes":{"solara-030-step12.pck":17502304,"solara-030-step12.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step14","experimentalVK":false,"fileSizes":{"solara-030-step14.pck":18059040,"solara-030-step14.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 (function () {
   const ld = document.getElementById('ld'), bar = document.querySelector('#bar i'), pct = document.getElementById('pct'),
