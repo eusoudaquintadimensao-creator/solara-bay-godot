@@ -1,13 +1,13 @@
 {
- "slug": "solara-030-step16",
- "version": "0.3.0-step16",
+ "slug": "solara-030-step17",
+ "version": "0.3.0-step17",
  "engine": "4.7.2",
  "project_hash": "ed8f8a0705ae6a59",
  "min_apk": 4,
- "pck_url": "https://eusoudaquintadimensao-creator.github.io/solara-bay-godot/apk/content-solara-030-step16.pck",
- "pck_size": 18897412,
- "sha256": "64253f5b6a31785f63e1d63c1234afc3c2bef09d4c8736f8dd46fd901daab760",
+ "pck_url": "https://eusoudaquintadimensao-creator.github.io/solara-bay-godot/apk/content-solara-030-step17.pck",
+ "pck_size": 18969576,
+ "sha256": "96def08b858de812d40234cdd66715c6f4ac72121604aea6252c5ad421bc0e4a",
  "apk_url": "https://eusoudaquintadimensao-creator.github.io/solara-bay-godot/apk/solara-bay.apk",
  "apk_slug": "solara-030-step16",
- "published": "2026-11-22 00:39"
+ "published": "2026-11-22 01:31"
 }
