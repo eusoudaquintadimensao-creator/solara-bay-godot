@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta name="theme-color" content="#0e1114">
+<title>Solara Bay - Prototipo Godot</title>
+<link rel="preload" as="image" href="loading_bg_v1.webp" type="image/webp" fetchpriority="high">
+<style>
+html,body,#canvas{margin:0;padding:0;border:0}
+body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+#canvas{display:block}#canvas:focus{outline:none}
+#ld{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;box-sizing:border-box;
+ background-color:#15131f;text-align:center;
+ /* t58: cidade neon de fundo (arquivo versionado, B26) + véu escuro para o texto ficar legível */
+ background-image:linear-gradient(180deg,rgba(10,8,20,.55) 0%,rgba(10,8,20,.25) 22%,rgba(10,8,20,.72) 40%,rgba(10,8,20,.78) 62%,rgba(10,8,20,.35) 82%,rgba(10,8,20,.6) 100%),url(loading_bg_v1.jpg);
+ background-image:linear-gradient(180deg,rgba(10,8,20,.55) 0%,rgba(10,8,20,.25) 22%,rgba(10,8,20,.72) 40%,rgba(10,8,20,.78) 62%,rgba(10,8,20,.35) 82%,rgba(10,8,20,.6) 100%),-webkit-image-set(url(loading_bg_v1.webp) type("image/webp"),url(loading_bg_v1.jpg) type("image/jpeg"));
+ background-image:linear-gradient(180deg,rgba(10,8,20,.55) 0%,rgba(10,8,20,.25) 22%,rgba(10,8,20,.72) 40%,rgba(10,8,20,.78) 62%,rgba(10,8,20,.35) 82%,rgba(10,8,20,.6) 100%),image-set(url(loading_bg_v1.webp) type("image/webp"),url(loading_bg_v1.jpg) type("image/jpeg"));
+ background-size:cover;background-position:54% 50%;background-repeat:no-repeat}
+@media (orientation:landscape){#ld{background-position:50% 60%}}
+#ld h1,#ld #pct,#ld #stage,#ld #hint{text-shadow:0 2px 10px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.9)}
+#ld h1{margin:0;font-weight:300;letter-spacing:.32em;font-size:clamp(20px,6vw,40px);color:#ffd27a}
+#ld h1 b{display:block;font-weight:600;letter-spacing:.18em;font-size:.55em;color:#5fd6cc;margin-top:6px}
+#bar{width:min(80vw,460px);height:10px;border-radius:6px;background:#22303a;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.4)}
+#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff4fb8,#ffd23f,#29f0ff);transition:width .3s}
+#pct{font:600 28px/1 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+#stage{font-size:16px;color:#e9e3d6;min-height:1.4em}
+#hint{font-size:13px;color:#a3a7b3;max-width:440px}
+#go{display:none;margin-top:8px;padding:16px 34px;border-radius:999px;border:0;font:700 20px system-ui,sans-serif;color:#1a1205;background:linear-gradient(180deg,#ffd23f,#e0a400);box-shadow:0 6px 24px rgba(255,210,63,.35)}
+#err{display:none;position:fixed;left:10px;right:10px;top:10px;z-index:20;max-height:45vh;overflow:auto;background:#3b1520;border:1px solid #ff5a7a;border-radius:12px;padding:12px 14px;font:13px/1.4 ui-monospace,Menlo,monospace;color:#ffe3e8;white-space:pre-wrap;word-break:break-word}
+#err b{font-family:system-ui,sans-serif;font-size:15px;color:#fff}
+#err button,#err a{margin:8px 8px 0 0;padding:8px 14px;border-radius:999px;border:1px solid #ff9db0;background:#5b2030;color:#fff;font:600 14px system-ui,sans-serif;text-decoration:none;display:inline-block}
+#tt{display:none;position:fixed;inset:0;z-index:30;flex-direction:column;background:linear-gradient(180deg,#120a24 0%,#07060d 100%);color:#fff;touch-action:auto}
+#tthead{display:flex;align-items:center;gap:10px;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top));background:rgba(0,0,0,.45);border-bottom:1px solid #3b2a63}
+#tthead b{font:700 18px system-ui,sans-serif;letter-spacing:.06em;color:#7ff3ff}#tthead span{font-size:13px;color:#c9b8ff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ttback{padding:14px 20px;border-radius:999px;border:0;font:800 18px system-ui,sans-serif;color:#1a1205;background:linear-gradient(180deg,#ffd23f,#e0a400);box-shadow:0 4px 18px rgba(255,210,63,.35);white-space:nowrap}
+#ttbody{flex:1;overflow-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;padding:10px;display:flex;flex-direction:column;gap:10px;align-items:center}
+#ttplayer{display:none;width:min(100%,420px)}.ttv{width:100%;aspect-ratio:9/16;max-height:72vh;border:0;border-radius:14px;background:#000}
+#ttvids{display:flex;gap:8px;overflow-x:auto;width:100%;padding-bottom:4px}#ttvids button{flex:0 0 auto;max-width:220px;padding:10px 14px;border-radius:12px;border:1px solid #6b4bd6;background:#23164a;color:#fff;font:600 14px system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ttprof{width:min(100%,780px)}.ttp{width:100%;height:min(560px,70vh);border:0;border-radius:14px;background:#fff}
+#ttpaste{display:flex;gap:8px;width:min(100%,520px)}#ttin{flex:1;min-width:0;padding:10px;border-radius:10px;border:1px solid #4a3a80;background:#0f0b1e;color:#fff;font-size:15px}#ttgo{padding:10px 16px;border-radius:10px;border:0;background:#5fd6cc;color:#062;font-weight:700}
+#ttnote{font-size:12px;color:#9aa0b8;max-width:520px;text-align:center;margin:0 0 20px}
+#upd{display:none;position:fixed;left:50%;transform:translateX(-50%);top:max(8px,env(safe-area-inset-top));z-index:25;max-width:min(94vw,520px);background:rgba(14,10,30,.94);border:1px solid #5fd6cc;border-radius:16px;padding:10px 12px;color:#fff;font:600 15px system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45);align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+#upd button{padding:10px 14px;border-radius:999px;border:0;font:700 15px system-ui,sans-serif}#updgo{background:linear-gradient(180deg,#ffd23f,#e0a400);color:#1a1205}#updlater{background:#2a2350;color:#fff}
+</style>
+<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step27.icon.png" />
+<link rel="apple-touch-icon" href="solara-030-step27.apple-touch-icon.png"/>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon_192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+<canvas id="canvas">Seu navegador não suporta canvas.</canvas>
+<noscript>Ative o JavaScript para jogar.</noscript>
+<div id="ld">
+  <h1>SOLARA BAY<b>MIAMI BEACH DRIVE</b></h1>
+  <div id="pct">0%</div>
+  <div id="bar"><i></i></div>
+  <div id="stage">Preparando…</div>
+  <div id="hint">Na primeira vez o jogo é baixado (cerca de 25 MB pela internet). Use Wi-Fi se puder.</div>
+  <button id="go" type="button">▶ Toque para jogar</button>
+</div>
+<div id="err" role="alert"></div>
+<div id="tt" aria-hidden="true">
+  <div id="tthead"><b>SIGMA · TikTok</b><span>@sigmadesenvolvedorapp</span><button id="ttback" type="button">◀ Voltar ao jogo</button></div>
+  <div id="ttbody">
+    <div id="ttplayer"></div>
+    <div id="ttvids"></div>
+    <div id="ttprof"></div>
+    <div id="ttpaste"><input id="ttin" type="url" inputmode="url" placeholder="Colar link de um vídeo do canal Sigma"><button id="ttgo" type="button">Assistir</button></div>
+    <p id="ttnote">Vídeos do TikTok mostrados com o player oficial do TikTok, dentro do jogo. Toques que tentariam abrir o site do TikTok ficam bloqueados aqui.</p>
+  </div>
+</div>
+<script>
+// ---------- Cinema holográfico: canal Sigma no TikTok SEM sair do jogo (t59) ----------
+// Só embeds oficiais: perfil do criador (https://www.tiktok.com/embed/@usuario) e player de vídeo
+// (https://www.tiktok.com/player/v1/<id>). Nada é baixado nem re-hospedado. Os iframes ficam em "sandbox"
+// sem allow-popups / allow-top-navigation: links que levariam para fora do jogo não abrem.
+(function () {
+  const USER = 'sigmadesenvolvedorapp';
+  // vídeos do canal (só os IDs públicos + título curto; views/curtidas aparecem no próprio embed do TikTok)
+  const VIDS = [
+    ['7710247373330550037', 'Jogo estilo GTA em Miami Beach grátis'], ['7710207394277821717', 'Miami Beach Drive Solara Bay'],
+    ['7709680408169893172', 'A pista de Miami já está aberta'], ['7709668821979778324', 'Enquanto o GTA 6 não chega…'],
+    ['7709664262733466900', 'Miami Beach Solara — jogo gratuito'], ['7709639639895690516', 'Miami Beach Solar — desenvolvedor'],
+    ['7709254137455660308', 'Solara Bay — Desenvolvedor Sigma Cinza'], ['7708892095083269396', 'Desenvolvendo Miami Beach Drive'],
+    ['7708492546036518164', 'Queimaram a mulher. O livro sobreviveu.'], ['7707236868370304308', 'Miami Beach Solara — estilo GTA × Midnight Club'],
+    ['7695547949555649812', 'Questionar para despertar'], ['7690036456677229588', 'Vídeo do canal Sigma'],
+  ];
+  const SB = 'allow-scripts allow-same-origin allow-presentation';
+  const tt = document.getElementById('tt'), pl = document.getElementById('ttplayer'), vids = document.getElementById('ttvids'),
+        prof = document.getElementById('ttprof'), inp = document.getElementById('ttin');
+  window.__solaraTikTokOpen = false;
+  function frame(src, cls, title) {
+    const f = document.createElement('iframe'); f.src = src; f.className = cls; f.title = title;
+    f.setAttribute('sandbox', SB); f.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+    f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin'); f.loading = 'eager'; return f;
+  }
+  function play(id) {
+    pl.innerHTML = ''; pl.style.display = 'block';
+    pl.appendChild(frame('https://www.tiktok.com/player/v1/' + id + '?autoplay=1&rel=0&description=1&music_info=1', 'ttv', 'Vídeo do canal Sigma'));
+    window.__solaraTikTokVideo = id; pl.scrollIntoView({ block: 'start' });
+  }
+  window.solaraTikTokPlay = play;
+  window.solaraTikTok = {
+    open: function () {
+      if (window.__solaraTikTokOpen) return 'já aberto';
+      window.__solaraTikTokOpen = true; window.__solaraTikTokVideo = null;
+      tt.style.display = 'flex'; tt.setAttribute('aria-hidden', 'false'); pl.style.display = 'none';
+      prof.innerHTML = ''; prof.appendChild(frame('https://www.tiktok.com/embed/@' + USER, 'ttp', 'Canal Sigma no TikTok'));
+      vids.innerHTML = '';
+      for (const [id, t] of VIDS) { const b = document.createElement('button'); b.type = 'button'; b.textContent = '▶ ' + t; b.onclick = () => play(id); vids.appendChild(b); }
+      if (document.fullscreenElement && document.exitFullscreen) {} // fica em tela cheia: é tudo dentro do jogo
+      return 'ok';
+    },
+    close: function () {
+      tt.style.display = 'none'; tt.setAttribute('aria-hidden', 'true');
+      pl.innerHTML = ''; prof.innerHTML = ''; vids.innerHTML = '';   // tira os iframes: o vídeo para e o celular respira
+      window.__solaraTikTokOpen = false; const c = document.getElementById('canvas'); if (c) c.focus();
+    },
+  };
+  document.getElementById('ttback').addEventListener('click', () => solaraTikTok.close());
+  document.getElementById('ttgo').addEventListener('click', () => {
+    const m = String(inp.value || '').match(/tiktok\.com\/@([\w.]+)\/video\/(\d{8,25})/);
+    if (m && m[1].toLowerCase() === USER) { play(m[2]); inp.value = ''; }
+    else { inp.value = ''; inp.placeholder = 'Só vídeos do canal @' + USER; }
+  });
+  // segurança extra: se algo tentar abrir janela nova enquanto o cinema está aberto, bloqueia
+  const wopen = window.open.bind(window);
+  window.open = function (u, n, f) { if (window.__solaraTikTokOpen && /tiktok\.com/i.test(String(u || ''))) { console.log('[Solara] cinema: bloqueado abrir ' + u); return null; } return wopen(u, n, f); };
+  // não deixa o toque/tecla "vazar" para o jogo enquanto o cinema está aberto
+  for (const ev of ['keydown', 'keyup']) tt.addEventListener(ev, (e) => e.stopPropagation());
+}());
+</script>
+<script>
+// Som no celular: guarda os AudioContext do jogo e chama resume() em TODO toque/tecla e ao voltar para a aba
+// (Chrome Android / Safari iOS só liberam áudio depois de um gesto; se o sistema suspender, volta sozinho).
+(function () {
+  const A = window.AudioContext || window.webkitAudioContext; if (!A) return;
+  const L = []; window.solaraAudioContexts = L;
+  const W = class extends A { constructor(...a) { super(...a); L.push(this); } };
+  window.AudioContext = W; if (window.webkitAudioContext) window.webkitAudioContext = W;
+  const wake = () => { for (const c of L) if (c.state !== 'running' && c.state !== 'closed') c.resume().catch(() => {}); };
+  for (const ev of ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'mousedown', 'keydown', 'click'])
+    document.addEventListener(ev, wake, {capture: true, passive: true});
+  // t82: em segundo plano o som para de verdade (menos bateria/memória); volta sozinho ao voltar
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) wake();
+    else for (const c of L) if (c.state === 'running') c.suspend().catch(() => {});
+  });
+})();
+</script>
+<script>
+// REC: grava a tela do jogo com o som (até 10 min) para compartilhar ou salvar. Guarda quem se liga na saída de som
+// (sem custo nenhum enquanto não grava); ao gravar, liga essas saídas também num MediaStreamDestination.
+(function () {
+  const srcs = []; const oc = AudioNode.prototype.connect;
+  AudioNode.prototype.connect = function (d, ...r) {
+    try { if (d instanceof AudioDestinationNode && srcs.indexOf(this) < 0) srcs.push(this); } catch (e) {}
+    return oc.call(this, d, ...r);
+  };
+  let rec = null, chunks = [], blob = null, t0 = 0, mime = '', timer = null, dest = null, err = '';
+  const pick = () => {
+    for (const m of ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'])
+      if (window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) return m;
+    return '';
+  };
+  const ext = () => (mime || '').indexOf('mp4') >= 0 ? 'mp4' : 'webm';
+  const name = () => 'solara-bay-' + new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-') + '.' + ext();
+  window.solaraRec = {
+    supported() { return !!(window.MediaRecorder && HTMLCanvasElement.prototype.captureStream); },
+    start(maxSec) {
+      if (rec) return 'gravando';
+      if (!this.supported()) return 'sem suporte';
+      try {
+        const vs = document.getElementById('canvas').captureStream(30);
+        const ctx = (window.solaraAudioContexts || [])[0];
+        if (ctx) { try { dest = ctx.createMediaStreamDestination(); for (const s of srcs) if (s.context === ctx) oc.call(s, dest); for (const tr of dest.stream.getAudioTracks()) vs.addTrack(tr); } catch (e) { dest = null; } }
+        mime = pick(); chunks = []; blob = null; err = '';
+        rec = new MediaRecorder(vs, mime ? {mimeType: mime, videoBitsPerSecond: 2500000} : {});
+        rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+        rec.onstop = () => {
+          blob = new Blob(chunks, {type: (mime || 'video/webm').split(';')[0]}); chunks = [];
+          if (dest) for (const s of srcs) { try { s.disconnect(dest); } catch (e) {} }
+          dest = null; rec = null; clearTimeout(timer);
+        };
+        rec.start(1000); t0 = performance.now();
+        timer = setTimeout(() => this.stop(), Math.min(maxSec || 600, 600) * 1000);
+        return 'ok';
+      } catch (e) { err = String(e); rec = null; return 'erro'; }
+    },
+    stop() { if (rec && rec.state !== 'inactive') rec.stop(); return 'ok'; },
+    state() { return JSON.stringify({rec: !!rec, secs: rec ? (performance.now() - t0) / 1000 : 0, ready: !!blob, size: blob ? blob.size : 0, mime: mime, audio: !!dest, err: err}); },
+    async share() {
+      if (!blob) return 'nada';
+      const f = new File([blob], name(), {type: blob.type});
+      try { if (navigator.canShare && navigator.canShare({files: [f]})) { await navigator.share({files: [f], title: 'Solara Bay', text: 'Meu passeio em Solara Bay!'}); return 'compartilhado'; } }
+      catch (e) { return 'cancelado'; }
+      return this.save();
+    },
+    save() {
+      if (!blob) return 'nada';
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name();
+      document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+      return 'salvo';
+    },
+    discard() { blob = null; return 'ok'; }
+  };
+})();
+</script>
+<script>
+// Hologramas de apps: o jogo marca o link em window.__solaraOpenUrl quando o dedo ENCOSTA em "Aceitar";
+// quando o dedo SOLTA (gesto do usuário) abrimos a aba nova aqui — assim o navegador não bloqueia o pop-up.
+(function () {
+  const open = () => { const u = window.__solaraOpenUrl; if (!u) return; window.__solaraOpenUrl = null;
+    const w = window.open(u, '_blank', 'noopener'); window.__solaraOpened = w ? 'ok' : 'bloqueado'; };
+  for (const ev of ['pointerup', 'touchend', 'click', 'keyup'])
+    document.addEventListener(ev, open, {capture: true});
+})();
+</script>
+<script>
+// ---------- painel de erros (para o jogador poder tirar print) ----------
+(function () {
+  const box = document.getElementById('err'); const seen = new Set(); let n = 0;
+  const IGNORE = /glBlitFramebuffer|GL_INVALID|WebGL: too many|AudioContext was not allowed|The AudioContext/i;
+  window.solaraShowError = function (title, msg, fatal) {
+    msg = String(msg || '').slice(0, 1200); if (IGNORE.test(msg) || seen.has(msg) || n > 12) return; seen.add(msg); n++;
+    if (!box.firstChild) {
+      box.innerHTML = '<b>⚠️ Algo deu errado — tire um print desta tela</b>\n<span id="errinfo"></span>\n';
+      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step27';
+      box.querySelector('#errinfo').textContent = info;
+      const r = document.createElement('a'); r.href = location.pathname + '?q=leve&r=' + Date.now(); r.textContent = '↻ Recarregar no modo leve';
+      const x = document.createElement('button'); x.textContent = 'Fechar'; x.onclick = () => { box.style.display = 'none'; };
+      box.append(r, x, document.createTextNode('\n'));
+    }
+    const p = document.createElement('div'); p.textContent = '• ' + title + ': ' + msg; box.appendChild(p);
+    if (fatal || !window.__solaraReady) box.style.display = 'block';
+  };
+  const STALE = /404|Failed to (load|fetch)|worklet|NetworkError|Load failed/i;
+  window.addEventListener('error', (e) => { const m = String(e.message || ''); if (STALE.test(m) && window.solaraReloadFresh && solaraReloadFresh('erro de arquivo: ' + m.slice(0, 80))) return; }, true);
+  window.addEventListener('unhandledrejection', (e) => { const m = String((e.reason && (e.reason.message || e.reason)) || ''); if (STALE.test(m) && window.solaraReloadFresh) solaraReloadFresh('erro de arquivo: ' + m.slice(0, 80)); });
+  window.addEventListener('error', (e) => solaraShowError('Erro', (e.message || e) + (e.filename ? ' (' + e.filename.split('/').pop() + ':' + e.lineno + ')' : '')));
+  window.addEventListener('unhandledrejection', (e) => solaraShowError('Erro', e.reason && (e.reason.message || e.reason)));
+}());
+</script>
+<script>
+// ---------- t82: voltar de outro app ----------
+// Ao esconder, o jogo salva na hora (cópia no localStorage) e marca 'solara_bg_resume'. Se o sistema fechou a aba
+// em segundo plano (descartada / sem bfcache), esta abertura volta direto do save, sem tela de entrada.
+try { window.__solaraResume = sessionStorage.getItem('solara_bg_resume') === '1' || !!document.wasDiscarded; } catch (e) { window.__solaraResume = !!document.wasDiscarded; }
+if (window.__solaraResume) console.log('[Solara] retomar: a aba foi fechada em segundo plano');
+// ---------- versão sempre certa (B26) ----------
+// Se o navegador guardou um index.html velho (de outra versão) ou algum arquivo da versão sumiu (404),
+// recarrega UMA vez com ?v=<agora> para pular o cache. ATUAL.txt (sem cache) diz qual versão está no ar.
+(function () {
+  const MY = 'solara-030-step27', KEY = 'solara_fresh_reload';
+  window.solaraReloadFresh = function (why) {
+    if (window.__solaraReady || sessionStorage.getItem(KEY)) return false;
+    sessionStorage.setItem(KEY, why); console.log('[Solara] recarregando sem cache: ' + why);
+    const u = new URL(location.href); u.searchParams.set('v', Date.now()); location.replace(u.toString()); return true;
+  };
+  window.solaraVersionCheck = Promise.race([
+    fetch('ATUAL.txt?nc=' + Date.now(), { cache: 'no-store' }).then((r) => (r.ok ? r.text() : '')).then((t) => {
+      t = (t || '').trim();
+      if (t && MY.indexOf('$') < 0 && t !== MY && /^solara-[\w-]+$/.test(t)) solaraReloadFresh('versão no ar ' + t + ', esta página ' + MY);
+    }).catch(() => {}),
+    new Promise((res) => setTimeout(res, 2500)),
+  ]);
+  window.addEventListener('load', () => setTimeout(() => { if (window.__solaraReady) sessionStorage.removeItem(KEY); }, 3000));
+}());
+</script>
+<script src="solara-030-step27.js" onerror="solaraReloadFresh('motor 404') || solaraShowError('Download', 'Não consegui baixar o motor do jogo. Recarregue a página.', true)"></script>
+<script>
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step27","experimentalVK":false,"fileSizes":{"solara-030-step27.pck":20587280,"solara-030-step27.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_THREADS_ENABLED = false;
+(function () {
+  const ld = document.getElementById('ld'), bar = document.querySelector('#bar i'), pct = document.getElementById('pct'),
+        stageEl = document.getElementById('stage'), hint = document.getElementById('hint'), go = document.getElementById('go'), canvas = document.getElementById('canvas');
+  const t0 = performance.now(); let last = t0, cur = 0, ready = false;
+  const T = () => ((performance.now() - t0) / 1000).toFixed(1) + ' s';
+  function show(p, text) { cur = Math.max(cur, Math.min(100, Math.round(p))); bar.style.width = cur + '%'; pct.textContent = cur + '%'; if (text) stageEl.textContent = text; last = performance.now(); }
+  // 0–60%: download · 60–70%: motor · 70–100%: montagem do mundo (etapas vindas do jogo)
+  window.solaraStage = function (text, p) { console.log('[Solara] ' + T() + ' etapa: ' + text); show(70 + p * 0.3, text); };
+  // t82: entra direto no jogo quando fica pronto (sem botão e SEM pedir tela cheia — o aviso do navegador
+  // "…github.io está em tela cheia, deslize para sair" aparecia na entrada e na saída). A Solara fala a dica no jogo.
+  window.solaraReady = function () {
+    ready = true; window.__solaraReady = true; console.log('[Solara] ' + T() + ' PRONTO');
+    show(100, 'Pronto!'); hint.textContent = ''; bar.parentNode.style.display = 'none';
+    ld.style.transition = 'opacity .35s'; ld.style.opacity = '0';
+    setTimeout(() => { if (ld.isConnected) ld.remove(); canvas.focus(); }, 380);
+  };
+  go.addEventListener('click', () => { ld.remove(); canvas.focus(); });
+  // t81: girar o celular sem tela preta — o tamanho do canvas é nosso (política "nenhuma" no motor):
+  // na hora o CSS só estica o último quadro; o buffer muda uma vez só, quando o tamanho para de mudar.
+  GODOT_CONFIG.canvasResizePolicy = 0;
+  canvas.style.position = 'fixed'; canvas.style.left = '0'; canvas.style.top = '0';
+  let fitT = 0;
+  function fitBuffer() {
+    const sc = window.devicePixelRatio || 1, w = Math.max(1, Math.floor(innerWidth * sc)), h = Math.max(1, Math.floor(innerHeight * sc));
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; window.__solaraResizes = (window.__solaraResizes || 0) + 1; }
+  }
+  function fitStyle() { canvas.style.width = innerWidth + 'px'; canvas.style.height = innerHeight + 'px'; }
+  function onResize() { fitStyle(); clearTimeout(fitT); fitT = setTimeout(() => { fitStyle(); fitBuffer(); }, 180); }
+  fitStyle(); fitBuffer();
+  window.addEventListener('resize', onResize);
+  window.addEventListener('orientationchange', onResize);
+  if (window.visualViewport) visualViewport.addEventListener('resize', onResize);
+  // celular lento: avisa em vez de parecer travado
+  setInterval(() => {
+    if (ready || !ld.isConnected) return;
+    const idle = (performance.now() - last) / 1000;
+    if (idle > 20) hint.textContent = 'Ainda trabalhando (' + Math.round(idle) + ' s nesta etapa)… celulares mais simples demoram mais na primeira vez. Não feche a página.';
+  }, 2000);
+  // WebGL 2 é obrigatório
+  try {
+    const gl = document.createElement('canvas').getContext('webgl2');
+    if (!gl) { solaraShowError('WebGL 2', 'Este navegador/celular não liberou WebGL 2 (gráficos 3D). Atualize o Chrome, desligue a economia de bateria e tente de novo.', true); stageEl.textContent = 'Seu navegador não suporta os gráficos 3D do jogo.'; return; }
+  } catch (e) {}
+  canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); solaraShowError('Vídeo', 'O celular ficou sem memória de vídeo (WebGL perdido). Feche outros apps/abas e recarregue no modo leve.', true); }, false);
+  const missing = Engine.getMissingFeatures({ threads: GODOT_THREADS_ENABLED });
+  if (missing.length) { solaraShowError('Navegador', 'Faltam recursos: ' + missing.join(', '), true); return; }
+  const engine = new Engine(GODOT_CONFIG); window.__godotEngine = engine;
+  show(1, 'Baixando o jogo…');
+  let dlDone = false;
+  // confere a versão no ar antes de baixar 50 MB (arquivo que falta = erro → recarrega 1 vez sem cache)
+  window.solaraVersionCheck.then(start);
+  function start() {
+  engine.startGame({
+    onProgress: function (c, t) {
+      if (c > 0 && t > 0) {
+        const mb = (x) => (x / 1048576).toFixed(1);
+        show(c / t * 60, 'Baixando o jogo…');
+        if (c >= t && !dlDone) { dlDone = true; console.log('[Solara] ' + T() + ' download completo'); show(62, 'Iniciando o motor…'); }
+      }
+    },
+    onPrint: function () { console.log.apply(console, arguments); },
+    onPrintError: function () {
+      const m = Array.prototype.join.call(arguments, ' '); console.error(m);
+      if (/SCRIPT ERROR|ERROR:|Parse Error|crash|Aborted|out of memory/i.test(m) && !/resources still in use|glBlit/i.test(m)) solaraShowError('Jogo', m);
+    },
+    onExit: function (code) { if (code) solaraShowError('Jogo', 'O jogo fechou (código ' + code + ').', true); },
+  }).then(() => {
+    console.log('[Solara] ' + T() + ' motor iniciado');
+    if (!ready) show(70, 'Montando a cidade…');
+  }, (err) => {
+    const m = (err && err.message) || String(err);
+    if (/404|Failed to (load|fetch)|worklet/i.test(m) && solaraReloadFresh('ao iniciar: ' + m.slice(0, 80))) return;
+    solaraShowError('Ao iniciar', /memory|Memory|allocation|OOM/i.test(m) ? m + '\nO celular ficou sem memória. Feche outros apps e tente de novo.' : m, true);
+    stageEl.textContent = 'Não foi possível iniciar o jogo.';
+  });
+  }
+}());
+</script>
+<div id="upd" role="status"><span id="updtxt">Nova versão disponível</span><button id="updgo" type="button">Atualizar agora</button><button id="updlater" type="button">Depois</button></div>
+<script>
+// ---------- PWA + atualização automática (t60) ----------
+// Service worker: rede primeiro para ATUAL.txt/HTML, cache primeiro para os arquivos versionados (offline funciona).
+// Jogando: confere ATUAL.txt (sem cache) a cada 3 min e ao voltar para o app. Versão nova → aviso discreto.
+// "Atualizar agora": o jogo espera um momento seguro (nunca no meio de corrida/voo), salva e recarrega.
+// "Depois": continua jogando; na próxima vez que abrir, a página já vem nova (HTML é rede-primeiro).
+(function () {
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { scope: './' }).then(
+      (r) => console.log('[Solara] PWA: service worker ativo em ' + r.scope), (e) => console.log('[Solara] PWA: sem service worker (' + e + ')')));
+  }
+  const MY = 'solara-030-step27', box = document.getElementById('upd'), txt = document.getElementById('updtxt');
+  let later = 0, newer = '';
+  function goNow() {
+    txt.textContent = 'Salvando e atualizando…';
+    setTimeout(() => { const u = new URL(location.href); u.searchParams.set('v', Date.now()); location.replace(u.toString()); }, 1200);   // dá tempo do save ir para o IndexedDB
+  }
+  window.solaraUpdateGoNow = goNow;
+  window.solaraUpdateWait = function () { txt.textContent = 'Atualiza assim que você parar (sem corrida/voo)…'; };
+  document.getElementById('updgo').addEventListener('click', () => {
+    if (!window.__solaraReady) { goNow(); return; }   // ainda carregando: pode recarregar direto
+    window.__solaraUpdateRequest = true; txt.textContent = 'Preparando a atualização…';
+    setTimeout(() => { if (window.__solaraUpdateRequest && !window.__solaraUpdateGo) txt.textContent = 'Atualiza assim que você parar…'; }, 4000);
+  });
+  document.getElementById('updlater').addEventListener('click', () => { box.style.display = 'none'; later = Date.now(); });
+  async function check(why) {
+    if (MY.indexOf('$') >= 0 || window.__solaraTikTokOpen) return;
+    try {
+      const r = await fetch('ATUAL.txt?nc=' + Date.now(), { cache: 'no-store' }); if (!r.ok) return;
+      const t = (await r.text()).trim();
+      if (!/^solara-[\w-]+$/.test(t) || t === MY) return;
+      newer = t; window.__solaraNewVersion = t;
+      if (!window.__solaraReady) { if (window.solaraReloadFresh) solaraReloadFresh('versão nova no ar ' + t); return; }   // B26
+      if (later && Date.now() - later < 10 * 60 * 1000) return;   // "Depois": lembra de novo em 10 min
+      if (box.style.display !== 'flex') { txt.textContent = 'Nova versão disponível'; box.style.display = 'flex'; console.log('[Solara] atualização: nova versão ' + t + ' (' + why + ')'); }
+    } catch (e) {}
+  }
+  window.solaraUpdateCheck = check;
+  setInterval(() => check('3 min'), 3 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) check('voltou ao app'); });
+  window.addEventListener('online', () => check('internet voltou'));
+  window.addEventListener('pageshow', (e) => { if (e.persisted) check('retomou'); });
+}());
+</script>
+</body>
+</html>
+
