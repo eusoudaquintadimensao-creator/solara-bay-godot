@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h0gx88ea8x2r"
-path="res://.godot/imported/solara-030-step33.icon.png-d65421f756e6dbbafac8fc3cefafedd1.ctex"
+uid="uid://cpgwgxh0ndt38"
+path="res://.godot/imported/solara-030-step35.icon.png-c54de32c36e936c8c2a2b709f7700ebf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://build/web/solara-030-step33.icon.png"
-dest_files=["res://.godot/imported/solara-030-step33.icon.png-d65421f756e6dbbafac8fc3cefafedd1.ctex"]
+source_file="res://build/web/solara-030-step35.icon.png"
+dest_files=["res://.godot/imported/solara-030-step35.icon.png-c54de32c36e936c8c2a2b709f7700ebf.ctex"]
 
 [params]
 
