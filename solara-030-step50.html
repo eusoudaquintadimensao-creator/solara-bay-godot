@@ -44,8 +44,8 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
 #upd{display:none;position:fixed;left:50%;transform:translateX(-50%);top:max(8px,env(safe-area-inset-top));z-index:25;max-width:min(94vw,520px);background:rgba(14,10,30,.94);border:1px solid #5fd6cc;border-radius:16px;padding:10px 12px;color:#fff;font:600 15px system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45);align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
 #upd button{padding:10px 14px;border-radius:999px;border:0;font:700 15px system-ui,sans-serif}#updgo{background:linear-gradient(180deg,#ffd23f,#e0a400);color:#1a1205}#updlater{background:#2a2350;color:#fff}
 </style>
-<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step47.icon.png" />
-<link rel="apple-touch-icon" href="solara-030-step47.apple-touch-icon.png"/>
+<link id="-gd-engine-icon" rel="icon" type="image/png" href="solara-030-step50.icon.png" />
+<link rel="apple-touch-icon" href="solara-030-step50.apple-touch-icon.png"/>
 
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon_192.png">
@@ -230,7 +230,7 @@ body{color:#fff;background:#0e1114;overflow:hidden;touch-action:none;font-family
     msg = String(msg || '').slice(0, 1200); if (IGNORE.test(msg) || seen.has(msg) || n > 12) return; seen.add(msg); n++;
     if (!box.firstChild) {
       box.innerHTML = '<b>⚠️ Algo deu errado — tire um print desta tela</b>\n<span id="errinfo"></span>\n';
-      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step47';
+      const info = 'Aparelho: ' + navigator.userAgent.replace(/^Mozilla\/5\.0 /, '') + '\nNúcleos: ' + (navigator.hardwareConcurrency || '?') + ' · Memória: ' + (navigator.deviceMemory || '?') + ' GB · Versão: 0.3.0-step50';
       box.querySelector('#errinfo').textContent = info;
       const r = document.createElement('a'); r.href = location.pathname + '?q=leve&r=' + Date.now(); r.textContent = '↻ Recarregar no modo leve';
       const x = document.createElement('button'); x.textContent = 'Fechar'; x.onclick = () => { box.style.display = 'none'; };
@@ -256,7 +256,7 @@ if (window.__solaraResume) console.log('[Solara] retomar: a aba foi fechada em s
 // Se o navegador guardou um index.html velho (de outra versão) ou algum arquivo da versão sumiu (404),
 // recarrega UMA vez com ?v=<agora> para pular o cache. ATUAL.txt (sem cache) diz qual versão está no ar.
 (function () {
-  const MY = 'solara-030-step47', KEY = 'solara_fresh_reload';
+  const MY = 'solara-030-step50', KEY = 'solara_fresh_reload';
   window.solaraReloadFresh = function (why) {
     if (window.__solaraReady || sessionStorage.getItem(KEY)) return false;
     sessionStorage.setItem(KEY, why); console.log('[Solara] recarregando sem cache: ' + why);
@@ -306,9 +306,9 @@ if (window.__solaraResume) console.log('[Solara] retomar: a aba foi fechada em s
   };
 })();
 </script>
-<script src="solara-030-step47.js" onerror="solaraReloadFresh('motor 404') || solaraShowError('Download', 'Não consegui baixar o motor do jogo. Recarregue a página.', true)"></script>
+<script src="solara-030-step50.js" onerror="solaraReloadFresh('motor 404') || solaraShowError('Download', 'Não consegui baixar o motor do jogo. Recarregue a página.', true)"></script>
 <script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step47","experimentalVK":false,"fileSizes":{"solara-030-step47.pck":21528228,"solara-030-step47.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"solara-030-step50","experimentalVK":false,"fileSizes":{"solara-030-step50.pck":21589356,"solara-030-step50.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 (function () {
   const ld = document.getElementById('ld'), bar = document.querySelector('#bar i'), pct = document.getElementById('pct'),
@@ -400,7 +400,7 @@ const GODOT_THREADS_ENABLED = false;
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { scope: './' }).then(
       (r) => console.log('[Solara] PWA: service worker ativo em ' + r.scope), (e) => console.log('[Solara] PWA: sem service worker (' + e + ')')));
   }
-  const MY = 'solara-030-step47', box = document.getElementById('upd'), txt = document.getElementById('updtxt');
+  const MY = 'solara-030-step50', box = document.getElementById('upd'), txt = document.getElementById('updtxt');
   let later = 0, newer = '';
   function goNow() {
     txt.textContent = 'Salvando e atualizando…';
