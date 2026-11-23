@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhhkgcdewqp34"
-path="res://.godot/imported/solara-030-step36.icon.png-2ce968c3f33582c82a60710e1d127e90.ctex"
+uid="uid://bv8i6ks2kbeay"
+path="res://.godot/imported/solara-030-step39.apple-touch-icon.png-c45b30373a214a1d5fd3215b9f5db459.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://build/web/solara-030-step36.icon.png"
-dest_files=["res://.godot/imported/solara-030-step36.icon.png-2ce968c3f33582c82a60710e1d127e90.ctex"]
+source_file="res://build/web/solara-030-step39.apple-touch-icon.png"
+dest_files=["res://.godot/imported/solara-030-step39.apple-touch-icon.png-c45b30373a214a1d5fd3215b9f5db459.ctex"]
 
 [params]
 
